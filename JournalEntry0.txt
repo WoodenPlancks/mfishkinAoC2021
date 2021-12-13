@@ -1,0 +1,1 @@
+This will be my first personal GitHub repository. I'm participating in Advent of Code 2021. I'll try to write this in C, both because I want to improve my skills in the language and also because I think Python would be too abstract.
