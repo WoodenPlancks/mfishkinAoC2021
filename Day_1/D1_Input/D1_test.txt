@@ -1,15 +1,14 @@
-10
-9
-10
-9
-22
-9
-22
-1
-2
-3
-4
-5
+199
+200
+208
+210
+200
+207
+240
+269
+260
+263
 -1
 
-There should be 7 depth increments.
+There should be 7 depth increments (windowSize = 1).
+There should be 5 depth sum increments (windowSize = 3).
