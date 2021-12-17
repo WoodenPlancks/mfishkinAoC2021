@@ -18,6 +18,7 @@ int main(void)
 
     int depth = 0;
     int hPos = 0;
+    int aim = 0;
 
     while (fgets(inputLine, sizeof(inputLine), fp)) 
     {
@@ -27,15 +28,16 @@ int main(void)
         {
             case 'u':
                 printf("Going up num: %d.\n", num);
-                depth -= num;
+                aim -= num;
                 break;
             case 'd':
                 printf("Going down num: %d.\n", num);
-                depth += num;
+                aim += num;
                 break;
             default:
                 printf("Going forward num: %d.\n", num);
                 hPos += num;
+                depth += aim * num;
                 break;
         }
     }
