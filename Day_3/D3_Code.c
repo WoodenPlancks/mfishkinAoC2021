@@ -5,7 +5,7 @@ int twoExp(int);
 
 int main(void)
 {
-    char const filePath[] = "./D3_Input/D3_input.txt";
+    char const filePath[] = "./D3_Input/D3_test.txt";
     char inputLine[255];
     int tally [255];
     int numDigits;
@@ -20,6 +20,8 @@ int main(void)
         printf("Could not find input text file at location %s.", filePath);
         return -1;
     }
+
+    // getting the length of the input line
 
     fgets(inputLine, sizeof(inputLine), fp);    
     for(numDigits=0; inputLine[numDigits] != '\n' && inputLine[numDigits] != '\0'; numDigits++);
@@ -60,6 +62,19 @@ int main(void)
     int powerRate = gammaRate * epsilonRate;
 
     printf("The power rate of the submarine is %d.\n", powerRate);
+
+    fclose(fp);
+
+    printf("\n\n-----------------------\n\nTALLY IS\n");
+
+    for(int i=0; i<numDigits; i++)
+    {
+        printf("%d ", tally[i]);
+    }
+    
+
+
+
     
 }
 
