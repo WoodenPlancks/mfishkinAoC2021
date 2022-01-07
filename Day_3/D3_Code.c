@@ -31,6 +31,8 @@ int main(void)
         tally[i] = 0;
     }
 
+    fclose(fp);
+
     fp = fopen(filePath, "r");
 
     while (fgets(inputLine, sizeof(inputLine), fp)) 
@@ -52,8 +54,8 @@ int main(void)
 
     for(int i=0; i<numDigits; i++)
     {
-        gammaRateDigits[i] = tally[i] > 0 ? 1 : 0;
-        epsilonRateDigits[i] = tally[i] > 0 ? 0 : 1;
+        gammaRateDigits[i] = tally[i] >= 0 ? 1 : 0;
+        epsilonRateDigits[i] = tally[i] >= 0 ? 0 : 1;
     }
 
     int gammaRate = binaryDigitArrayToDecimal(gammaRateDigits, numDigits);
@@ -65,17 +67,7 @@ int main(void)
 
     fclose(fp);
 
-    printf("\n\n-----------------------\n\nTALLY IS\n");
-
-    for(int i=0; i<numDigits; i++)
-    {
-        printf("%d ", tally[i]);
-    }
-    
-
-
-
-    
+    fp = fopen(filePath, "r");
 }
 
 int binaryDigitArrayToDecimal(int* arr, int len)
