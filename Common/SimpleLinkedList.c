@@ -72,29 +72,67 @@ int LLAdd(LinkedList* list, int value)
         curr = curr->next;
     }
 
-    printf("prev is %p\n", prev);
-    printf("prev->next is %p\n", prev->next);
-    printf("prev->val is %d\n", prev->val);
     prev->next = CreateLLNode(value);
 
     list->len++;
     return value;
 }
 
+
+// Delete a node with the *value* from the *list*.
+int LLDelete(LinkedList* list, int value)
+{
+    LLNode* curr;
+    LLNode* prev;
+
+    // HEAD* --> [1] --> NULL
+
+    if(list->head == NULL)
+    {
+        printf("ERROR: Can't delete value %d from an empty list!\n", value);
+        return -1;
+    }
+
+    if(list->head->val == value)
+    {
+        list->head = list->head->next;
+        list->len--;
+        return value;
+    }
+
+    curr = list->head;
+    prev = list->head;
+
+    while(curr != NULL)
+    {
+        if(curr->val == value)
+        {
+            prev->next = curr->next;
+            list->len--;
+            return value;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+
+    printf("Couldn't find value %d in the list.\n", value);
+    return -1;
+}
+
+// Print the LinkedList - with some formatting!
 int LLPrint(LinkedList* list)
 {
     LLNode* curr;
 
     curr = list->head;
 
-    printf("Printing linked list...\n");
-    printf("[ HEAD ] --> ");
+    printf("HEAD* --> ");
 
     while(curr != NULL)
     {
-        printf("[ %d ] --> ", curr->val);
+        printf("[%d] --> ", curr->val);
         curr = curr->next;
     }
 
-    printf("NULL\n\n");
+    printf("NULL\n");
 }
