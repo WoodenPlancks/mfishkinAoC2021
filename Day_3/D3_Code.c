@@ -1,4 +1,6 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "../Common/SimpleLinkedList.c"
 
 int binaryDigitArrayToDecimal(int*, int);
 int twoExp(int);
@@ -8,10 +10,16 @@ int main(void)
     char const filePath[] = "./D3_Input/D3_test.txt";
     char inputLine[255];
     int tally [255];
+    int oxyGenTally [255];
+    int carScrTally [255];
+    int currNum[255];
     int numDigits;
 
     int gammaRateDigits[255];
     int epsilonRateDigits[255];
+
+    LinkedList* oxyGenRatingList = CreateLL();
+    LinkedList* carScrRatingList = CreateLL();
 
     FILE* fp = fopen(filePath, "r");
 
@@ -48,8 +56,11 @@ int main(void)
             {
                 tally[i]--;
             }
-                
+            currNum[i] = currDigit;
         }
+
+        LLAdd(oxyGenRatingList, binaryDigitArrayToDecimal(currNum, numDigits));
+        LLAdd(carScrRatingList, binaryDigitArrayToDecimal(currNum, numDigits));
     }
 
     for(int i=0; i<numDigits; i++)
@@ -67,7 +78,53 @@ int main(void)
 
     fclose(fp);
 
-    fp = fopen(filePath, "r");
+    for(int i=0; i<numDigits; i++)
+    {
+        oxyGenTally[i] = tally[i];
+        carScrTally[i] = tally[i];
+    }
+
+    LLPrint(oxyGenRatingList);
+    LLPrint(carScrRatingList);
+
+    for(int bitCriteriaInd=0; bitCriteriaInd<numDigits; bitCriteriaInd++)
+    {
+        printf("\n\n------------\n");
+        printf("The tally is at pos %d is %d.\n", bitCriteriaInd, oxyGenTally[bitCriteriaInd]);
+        int bitCriteria = oxyGenTally[bitCriteriaInd] >= 0 ? 1 : 0;
+        printf("The bitCrit at pos %d is %d\n", bitCriteriaInd, bitCriteria);
+        fp = fopen(filePath, "r");
+        while (fgets(inputLine, sizeof(inputLine), fp)) 
+        {
+            printf("inputLine is %sThat is %d.\n", inputLine, strtol(inputLine, NULL, 2));
+
+            int bit = inputLine[bitCriteriaInd] - 48;
+            
+            if(bit != bitCriteria)
+            {
+                printf("The bitCrit at pos %d is %d, but got %d.\n", bitCriteriaInd, bitCriteria, bit);
+                for(int i=bitCriteriaInd+1; i<numDigits; i++)
+                {
+                    int canDelete = LLDelete(oxyGenRatingList, strtol(inputLine, NULL, 2));
+                    if(canDelete != -1)
+                    {
+                        int decr = inputLine[bitCriteriaInd] - 48 == 1 ? -1 : 1;
+                        oxyGenTally[bitCriteriaInd] += decr;
+                    }
+                }
+            }
+            
+            LLPrint(oxyGenRatingList);
+            printf("\n");
+            if(oxyGenRatingList->len == 1)
+            {
+                LLPrint(oxyGenRatingList);
+            }
+        }
+        fclose(fp);
+    }
+
+    
 }
 
 int binaryDigitArrayToDecimal(int* arr, int len)
