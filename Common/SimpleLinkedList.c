@@ -85,8 +85,6 @@ int LLDelete(LinkedList* list, int value)
     LLNode* curr;
     LLNode* prev;
 
-    // HEAD* --> [1] --> NULL
-
     if(list->head == NULL)
     {
         printf("ERROR: Can't delete value %d from an empty list!\n", value);
@@ -97,7 +95,7 @@ int LLDelete(LinkedList* list, int value)
     {
         list->head = list->head->next;
         list->len--;
-        return value;
+        return curr->val;
     }
 
     curr = list->head;
@@ -109,7 +107,7 @@ int LLDelete(LinkedList* list, int value)
         {
             prev->next = curr->next;
             list->len--;
-            return value;
+            return curr->val;
         }
         prev = curr;
         curr = curr->next;
@@ -118,6 +116,118 @@ int LLDelete(LinkedList* list, int value)
     printf("Couldn't find value %d in the list.\n", value);
     return -1;
 }
+
+int LLDeleteFirstGT(LinkedList* list, int value)
+{
+    LLNode* curr;
+    LLNode* prev;
+
+    if(list->head == NULL)
+    {
+        printf("ERROR: Can't delete value %d from an empty list!\n", value);
+        return -1;
+    }
+
+    if(list->head->val > value)
+    {
+        int headVal = list->head->val;
+        list->head = list->head->next;
+        list->len--;
+        return headVal;
+    }
+
+    curr = list->head;
+    prev = list->head;
+
+    while(curr != NULL)
+    {
+        if(curr->val > value)
+        {
+            prev->next = curr->next;
+            list->len--;
+            return curr->val;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+
+    printf("Couldn't find values greater than %d in the list.\n", value);
+    return -1;
+}
+
+
+int LLDeleteFirstLT(LinkedList* list, int value)
+{
+    LLNode* curr;
+    LLNode* prev;
+
+    if(list->head == NULL)
+    {
+        printf("ERROR: Can't delete value %d from an empty list!\n", value);
+        return -1;
+    }
+
+    if(list->head->val < value)
+    {
+        int headVal = list->head->val;
+        list->head = list->head->next;
+        list->len--;
+        return headVal;
+    }
+
+    curr = list->head;
+    prev = list->head;
+
+    while(curr != NULL)
+    {
+        if(curr->val < value)
+        {
+            int currVal = curr->val;
+            prev->next = curr->next;
+            list->len--;
+            return currVal;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+
+    printf("Couldn't find values lesser than %d in the list.\n", value);
+    return -1;
+}
+
+int LLSubtractFromAll(LinkedList* list, int subtractor)
+{
+    LLNode* curr;
+
+    curr = list->head;
+
+    while(curr != NULL)
+    {
+        curr->val -= subtractor;
+        curr = curr->next;
+    }
+
+    return 0;
+
+}
+
+
+int LLAddToAll(LinkedList* list, int addition)
+{
+    LLNode* curr;
+
+    curr = list->head;
+
+    while(curr != NULL)
+    {
+        curr->val += addition;
+        curr = curr->next;
+    }
+
+    return 0;
+
+}
+
 
 // Print the LinkedList - with some formatting!
 int LLPrint(LinkedList* list)

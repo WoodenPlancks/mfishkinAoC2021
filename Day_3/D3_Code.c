@@ -87,44 +87,39 @@ int main(void)
     LLPrint(oxyGenRatingList);
     LLPrint(carScrRatingList);
 
-    for(int bitCriteriaInd=0; bitCriteriaInd<numDigits; bitCriteriaInd++)
+    int addBack = 0;
+
+    for(int bitCriteriaInd=0; bitCriteriaInd<numDigits && oxyGenRatingList->len > 1; bitCriteriaInd++)
     {
-        printf("\n\n------------\n");
-        printf("The tally is at pos %d is %d.\n", bitCriteriaInd, oxyGenTally[bitCriteriaInd]);
-        int bitCriteria = oxyGenTally[bitCriteriaInd] >= 0 ? 1 : 0;
-        printf("The bitCrit at pos %d is %d\n", bitCriteriaInd, bitCriteria);
-        fp = fopen(filePath, "r");
-        while (fgets(inputLine, sizeof(inputLine), fp)) 
+        
+        LLPrint(oxyGenRatingList);
+        int bitCriterion = oxyGenTally[bitCriteriaInd] >= 0 ? 1 : 0;
+        int exp = numDigits - bitCriteriaInd - 1;
+        int thres = twoExp(exp);
+        
+        int ret = bitCriterion == 1 ? LLDeleteFirstLT(oxyGenRatingList, thres) : LLDeleteFirstGT(oxyGenRatingList, thres);
+        int listDecr = bitCriterion == 0 ? 0 : thres;
+        addBack += listDecr;
+        while(ret != -1)
         {
-            printf("inputLine is %sThat is %d.\n", inputLine, strtol(inputLine, NULL, 2));
-
-            int bit = inputLine[bitCriteriaInd] - 48;
-            
-            if(bit != bitCriteria)
+            printf("ret is %d\n", ret);
+            for(int i=0; i<numDigits; i++)
             {
-                printf("The bitCrit at pos %d is %d, but got %d.\n", bitCriteriaInd, bitCriteria, bit);
-                for(int i=bitCriteriaInd+1; i<numDigits; i++)
-                {
-                    int canDelete = LLDelete(oxyGenRatingList, strtol(inputLine, NULL, 2));
-                    if(canDelete != -1)
-                    {
-                        int decr = inputLine[bitCriteriaInd] - 48 == 1 ? -1 : 1;
-                        oxyGenTally[bitCriteriaInd] += decr;
-                    }
-                }
+                printf("%d ", ((ret>>i)&1) == 1 ? -1 : 1);
+                oxyGenTally[numDigits - 1 - i] += ((ret>>i)&1) == 1 ? -1 : 1;
             }
-            
-            LLPrint(oxyGenRatingList);
             printf("\n");
-            if(oxyGenRatingList->len == 1)
+            for(int i=0; i<numDigits; i++)
             {
-                LLPrint(oxyGenRatingList);
+                printf("%d ", oxyGenTally[i]);
             }
+            printf("\n");
+            ret = bitCriterion == 1 ? LLDeleteFirstLT(oxyGenRatingList, thres) : LLDeleteFirstGT(oxyGenRatingList, thres);
         }
-        fclose(fp);
+        LLSubtractFromAll(oxyGenRatingList, listDecr);
     }
-
-    
+    LLAddToAll(oxyGenRatingList, addBack);
+    LLPrint(oxyGenRatingList);
 }
 
 int binaryDigitArrayToDecimal(int* arr, int len)
