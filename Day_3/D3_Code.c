@@ -7,7 +7,7 @@ int twoExp(int);
 
 int main(void)
 {
-    char const filePath[] = "./D3_Input/D3_test.txt";
+    char const filePath[] = "./D3_Input/D3_input.txt";
     char inputLine[255];
     int tally [255];
     int oxyGenTally [255];
@@ -84,42 +84,59 @@ int main(void)
         carScrTally[i] = tally[i];
     }
 
-    LLPrint(oxyGenRatingList);
-    LLPrint(carScrRatingList);
-
     int addBack = 0;
 
     for(int bitCriteriaInd=0; bitCriteriaInd<numDigits && oxyGenRatingList->len > 1; bitCriteriaInd++)
     {
-        
-        LLPrint(oxyGenRatingList);
-        int bitCriterion = oxyGenTally[bitCriteriaInd] >= 0 ? 1 : 0;
+        int bitCriterion = oxyGenTally[bitCriteriaInd] > 0 ? 1 : 0;
         int exp = numDigits - bitCriteriaInd - 1;
         int thres = twoExp(exp);
         
         int ret = bitCriterion == 1 ? LLDeleteFirstLT(oxyGenRatingList, thres) : LLDeleteFirstGT(oxyGenRatingList, thres);
         int listDecr = bitCriterion == 0 ? 0 : thres;
         addBack += listDecr;
-        while(ret != -1)
+        while(ret != -1 && oxyGenRatingList->len>1)
         {
-            printf("ret is %d\n", ret);
             for(int i=0; i<numDigits; i++)
             {
-                printf("%d ", ((ret>>i)&1) == 1 ? -1 : 1);
                 oxyGenTally[numDigits - 1 - i] += ((ret>>i)&1) == 1 ? -1 : 1;
             }
-            printf("\n");
-            for(int i=0; i<numDigits; i++)
-            {
-                printf("%d ", oxyGenTally[i]);
-            }
-            printf("\n");
             ret = bitCriterion == 1 ? LLDeleteFirstLT(oxyGenRatingList, thres) : LLDeleteFirstGT(oxyGenRatingList, thres);
         }
         LLSubtractFromAll(oxyGenRatingList, listDecr);
     }
     LLAddToAll(oxyGenRatingList, addBack);
-    LLPrint(oxyGenRatingList);
+
+    addBack = 0;
+
+    for(int bitCriteriaInd=0; bitCriteriaInd<numDigits && carScrRatingList->len > 1; bitCriteriaInd++)
+    {
+        int bitCriterion = carScrTally[bitCriteriaInd] >= 0 ? 1 : 0;
+        int exp = numDigits - bitCriteriaInd - 1;
+        int thres = twoExp(exp);
+        
+        int ret = bitCriterion == 0 ? LLDeleteFirstLT(carScrRatingList, thres) : LLDeleteFirstGT(carScrRatingList, thres);
+        int listDecr = bitCriterion == 0 ? 0 : thres;
+        addBack += listDecr;
+        while(ret != -1 && carScrRatingList->len>1)
+        {
+            for(int i=0; i<numDigits; i++)
+            {
+                carScrTally[numDigits - 1 - i] += ((ret>>i)&1) == 1 ? -1 : 1;
+            }
+            ret = bitCriterion == 0 ? LLDeleteFirstLT(carScrRatingList, thres) : LLDeleteFirstGT(carScrRatingList, thres);
+        }
+        LLSubtractFromAll(carScrRatingList, listDecr);
+    }
+    LLAddToAll(carScrRatingList, addBack);
+
+    int oxygenGeneratorRating = LLDeleteFirstGT(oxyGenRatingList, -1);
+    int carbonScrubbingRating = LLDeleteFirstGT(carScrRatingList, -1);
+    int lifeSupportRating = oxygenGeneratorRating * carbonScrubbingRating;
+
+    printf("The oxygen generator rating of the submarine is %d.\n", oxygenGeneratorRating);
+    printf("The carbon scrubbing rating of the submarine is %d.\n", carbonScrubbingRating);
+    printf("The life support rating of the submarine is %d.\n", lifeSupportRating);
 }
 
 int binaryDigitArrayToDecimal(int* arr, int len)
