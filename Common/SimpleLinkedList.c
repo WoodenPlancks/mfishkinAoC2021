@@ -228,6 +228,27 @@ int LLAddToAll(LinkedList* list, int addition)
 
 }
 
+int LLPop(LinkedList* list)
+{
+    if(list == NULL)
+    {
+        printf("Cannot pop: invalid LinkedList.\n");
+        return -1;
+    }
+    LLNode* curr;
+    curr = list->head;
+
+    if(list->head == NULL)
+    {
+        printf("Cannot pop from empty LinkedList.\n");
+        return -1;
+    }
+
+    return LLDeleteFirstGT(list, -1);
+
+}
+
+
 
 // Print the LinkedList - with some formatting!
 int LLPrint(LinkedList* list)
