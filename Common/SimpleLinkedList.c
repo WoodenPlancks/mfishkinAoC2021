@@ -248,6 +248,25 @@ int LLPop(LinkedList* list)
 
 }
 
+LinkedList* LLCopy(LinkedList* toCopy)
+{
+    LinkedList* duplicate = CreateLL();
+
+    if(toCopy == NULL)
+    {
+        printf("Can't copy an invalid list.\n");
+        return NULL;
+    }
+
+    LLNode* holder = toCopy->head;
+
+    while(holder != NULL)
+    {
+        LLAdd(duplicate, holder->val);
+        holder = holder->next;
+    }
+}
+
 
 
 // Print the LinkedList - with some formatting!

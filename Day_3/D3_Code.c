@@ -7,7 +7,7 @@ int twoExp(int);
 
 int main(void)
 {
-    char const filePath[] = "./D3_Input/D3_input.txt";
+    char const filePath[] = "./D3_Input/D3_test2.txt";
     char inputLine[255];
     int tally [255];
     int oxyGenTally [255];
@@ -75,7 +75,29 @@ int main(void)
     int powerRate = gammaRate * epsilonRate;
 
     fclose(fp);
+
+
+    int ret = bitsInListAtIndex(oxyGenRatingList, 0);
     
+}
+
+int bitsInListAtIndex(LinkedList* list, int index)
+{
+    LinkedList* temp = LLCopy(list);
+    int holder = LLPop(temp);
+    int score = 0;
+
+    while(holder != -1)
+    {
+        int bitExtract = ((holder >> index) & 1);
+        printf("The bit in index %d of %d is %d.\n", index, holder, bitExtract);
+        score += bitExtract == 1 ? 1 : -1;
+        holder = LLPop(temp);
+    }
+
+    free(temp);
+
+    return (score);
 }
 
 int binaryDigitArrayToDecimal(int* arr, int len)
