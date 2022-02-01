@@ -76,12 +76,15 @@ int main(void)
 
     fclose(fp);
 
-
-    int ret = bitsInListAtIndex(oxyGenRatingList, 0);
+    for(int i=0; i<numDigits; i++)
+    {
+        int ret = bitsInListAtIndex(oxyGenRatingList, i, numDigits);
+        printf("%d, %d\n", i, ret >= 0 ? 1 : 0);
+    }
     
 }
 
-int bitsInListAtIndex(LinkedList* list, int index)
+int bitsInListAtIndex(LinkedList* list, int index, int numDigits)
 {
     LinkedList* temp = LLCopy(list);
     int holder = LLPop(temp);
@@ -89,8 +92,7 @@ int bitsInListAtIndex(LinkedList* list, int index)
 
     while(holder != -1)
     {
-        int bitExtract = ((holder >> index) & 1);
-        printf("The bit in index %d of %d is %d.\n", index, holder, bitExtract);
+        int bitExtract = ((holder >> (numDigits - index - 1)) & 1);
         score += bitExtract == 1 ? 1 : -1;
         holder = LLPop(temp);
     }

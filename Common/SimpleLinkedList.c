@@ -265,6 +265,8 @@ LinkedList* LLCopy(LinkedList* toCopy)
         LLAdd(duplicate, holder->val);
         holder = holder->next;
     }
+
+    return duplicate;
 }
 
 
