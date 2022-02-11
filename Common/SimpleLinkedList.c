@@ -287,4 +287,5 @@ int LLPrint(LinkedList* list)
     }
 
     printf("NULL\n");
+    return 0;
 }
